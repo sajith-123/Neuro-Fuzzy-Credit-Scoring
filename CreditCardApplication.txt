@@ -1,0 +1,66 @@
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const CreditCardApplication = () => {
+  const [creditScore, setCreditScore] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleGenerateOffer = () => {
+    if (!creditScore) {
+      setError("Please enter your credit score.");
+      setMessage("");
+      return;
+    }
+    if (creditScore < 300 || creditScore > 850) {
+      setError("Credit score must be between 300 and 850.");
+      setMessage("");
+      return;
+    }
+    setError("");
+    setMessage(`🎉 Based on your credit score of ${creditScore}, we have generated your offer!`);
+  };
+
+  return (
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="card shadow-lg border-0 rounded-4" style={{ width: "400px" }}>
+        <div className="card-body p-4">
+          <h4 className="card-title text-center mb-3 text-primary fw-bold">
+            Credit Card Application
+          </h4>
+          <p className="text-muted text-center mb-4">
+            Please provide the following information from the Credit Card Management System to generate an initial offer.
+          </p>
+
+          <label className="form-label fw-semibold">Inquiry</label>
+          <input
+            type="number"
+            className={`form-control mb-3 ${error ? "is-invalid" : ""}`}
+            placeholder="Enter Credit Score"
+            value={creditScore}
+            onChange={(e) => setCreditScore(e.target.value)}
+          />
+          {error && <div className="invalid-feedback">{error}</div>}
+
+          <button
+            className="btn btn-primary w-100 py-2 fw-bold"
+            style={{ transition: "all 0.3s" }}
+            onMouseOver={(e) => e.target.style.backgroundColor = "#0a58ca"}
+            onMouseOut={(e) => e.target.style.backgroundColor = ""} 
+            onClick={handleGenerateOffer}
+          >
+            Generate Offer
+          </button>
+
+          {message && (
+            <div className="alert alert-success mt-3 animate__animated animate__fadeIn">
+              {message}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreditCardApplication;
