@@ -1,0 +1,172 @@
+import React, { useState } from "react";
+import Sclogo from "../offers/sclogo.png";  // Keep your logo here
+
+export default function UploadAndViewOffer() {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    contactNo: "",
+    aadharNo: "",
+    aadharFile: null,
+    pan: "",
+    panFile: null,
+    passportPhoto: null,
+    creditCardType: "Silver",
+  });
+
+  const [applicationId, setApplicationId] = useState("");
+  const [creditScore, setCreditScore] = useState(null);
+  const [result, setResult] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Simulate credit score
+    const simulatedScore =
+      Math.floor(Math.random() * (850 - 300 + 1)) + 300;
+    setCreditScore(simulatedScore);
+
+    // Decision
+    if (simulatedScore >= 750) {
+      setResult(`✅ Score = ${simulatedScore}. Offer Approved!`);
+    } else {
+      setResult(`❌ Score = ${simulatedScore}. Offer Rejected.`);
+    }
+
+    alert(
+      `✅ Documents saved successfully. Bureau Credit Check initiated!
+       ApplicationID: ${applicationId || "N/A"},
+       CreditScore: ${simulatedScore}`
+    );
+  };
+
+  return (
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-white">
+      <div className="card p-4 shadow-sm" style={{ minWidth: "350px" }}>
+        <img
+          className="card-img-top rounded-pill mx-auto d-block"
+          src={Sclogo}
+          alt="SC Logo"
+          style={{ width: "180px" }}
+        />
+
+        <h4 className="card-title text-center my-2" style={{ color: "green" }}>
+          Upload Documents & View Offer
+        </h4>
+
+        <form onSubmit={handleSubmit}>
+          {/* Form fields */}
+          <label>Full Name:</label>
+          <input
+            type="text"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>Contact No:</label>
+          <input
+            type="number"
+            name="contactNo"
+            value={formData.contactNo}
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>Aadhar Number:</label>
+          <input
+            type="number"
+            name="aadharNo"
+            value={formData.aadharNo}
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>Aadhar File:</label>
+          <input
+            type="file"
+            name="aadharFile"
+            accept="application/pdf"
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>PAN:</label>
+          <input
+            type="text"
+            name="pan"
+            value={formData.pan}
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>PAN File:</label>
+          <input
+            type="file"
+            name="panFile"
+            accept="application/pdf"
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>Passport Photo (<= 200 kb):</label>
+          <input
+            type="file"
+            name="passportPhoto"
+            accept="image/jpeg"
+            onChange={handleChange}
+            required
+            className="form-control mb-2"
+          />
+
+          <label>Credit Card Type:</label>
+          <select
+            name="creditCardType"
+            value={formData.creditCardType}
+            onChange={handleChange}
+            className="form-control mb-3"
+          >
+            <option>Silver</option>
+            <option>Gold</option>
+            <option>Platinum</option>
+          </select>
+
+          <label>Application ID:</label>
+          <input
+            type="text"
+            value={applicationId}
+            onChange={(e) => setApplicationId(e.target.value)}
+            required
+            className="form-control mb-3"
+          />
+
+          <button type="submit" className="btn btn-primary w-100">
+            Submit & Check Offer
+          </button>
+        </form>
+
+        {/* Display Result */}
+        {result && (
+          <div className="alert text-center mt-3">
+            {result}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
